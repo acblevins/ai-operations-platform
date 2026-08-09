@@ -72,6 +72,15 @@ http://ai-operations-backend:5001
 
 The backend container's IP address does not need to be hard-coded into the application.
 
+## Service-to-Service Communication
+
+The platform application now communicates directly with the backend service over the Docker network.
+
+The platform container sends an HTTP request to:
+
+```text
+http://ai-operations-backend:5001
+
 ## Testing Container-to-Container Communication
 
 Communication was tested from inside the platform container:
