@@ -1,0 +1,15 @@
+services:
+
+  platform:
+    build:
+      context: .
+    container_name: ai-operations-platform
+    ports:
+      - "5000:5000"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ai-operations-backend

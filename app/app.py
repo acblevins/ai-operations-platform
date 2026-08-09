@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     backend_response = urllib.request.urlopen(
-        "http://ai-operations-backend:5001"
+        "http://backend:5001"
     ).read().decode()
 
     return f"Platform received: {backend_response}"

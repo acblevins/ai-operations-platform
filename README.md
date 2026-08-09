@@ -79,25 +79,79 @@ The platform application now communicates directly with the backend service over
 The platform container sends an HTTP request to:
 
 ```text
-http://ai-operations-backend:5001
+http://backend:5001
 ```
+
+## Docker Compose
+
+The application was migrated from manually managed Docker containers to Docker Compose.
+
+The Compose configuration is defined in:
+
+```text
+compose.yml
+```
+
+Docker Compose manages both application services:
+
+```text
++---------------------------+
+|     Docker Compose        |
+|                           |
+|  +---------+ +---------+  |
+|  |Platform | | Backend |  |
+|  | :5000   | | :5001   |  |
+|  +----+----+ +----+----+  |
+|       |           |       |
+|       +-----+-----+       |
+|             |             |
+|     Compose Network       |
++---------------------------+
+```
+
+The platform service is exposed to the Docker host on port `5000`.
+
+The backend service is not published to the host. It is accessed internally by the platform using the Compose service name:
+
+```text
+http://backend:5001
+```
+
+Docker Compose automatically creates a network for the application and provides service discovery between containers.
+
+The application can be started with:
+
+```bash
+docker compose -f compose.yml up --build
+```
+
+This command builds the application images, creates the required containers and network, and starts the services together.
+
+### Compose Concepts Demonstrated
+
+* Multi-service application definition
+* Automatic Docker network creation
+* Service-name based DNS
+* Container dependency configuration
+* Port publishing
+* Image building through Compose
+* Replacing manually managed container startup
 
 ## Testing Container-to-Container Communication
 
-Communication was tested from inside the platform container:
+Communication was tested through the platform application using:
 
 ```bash
-docker exec ai-operations-platform-v13 \
-python -c "import urllib.request; print(urllib.request.urlopen('http://ai-operations-backend:5001').read().decode())"
+curl http://localhost:5000
 ```
 
 Expected response:
 
 ```text
-Hello from the Backend Container!
+Platform received: Hello from the Backend Container!
 ```
 
-This confirms that the two containers can communicate over the custom Docker network.
+This confirms that the platform service can communicate with the backend service through the Docker Compose network.
 
 ## Project Structure
 
@@ -109,6 +163,7 @@ ai-operations-platform/
 │   ├── app.py
 │   └── Dockerfile
 ├── Dockerfile
+├── compose.yml
 ├── requirements.txt
 └── README.md
 ```
@@ -127,6 +182,7 @@ This project is being developed as a practical environment for learning Docker a
 * Container DNS/service discovery
 * Multi-container application architecture
 * Service-to-service communication
+* Docker Compose
 * Git and GitHub project management
 
 ## Current Status
@@ -145,11 +201,12 @@ This project is being developed as a practical environment for learning Docker a
 * [x] Create custom Docker network
 * [x] Connect multiple containers to the network
 * [x] Test container-to-container communication
+* [x] Migrate application to Docker Compose
+* [x] Configure Compose service discovery
+* [x] Start multi-container application with Docker Compose
 
 ### Planned
 
-* [ ] Connect the platform Flask application directly to the backend
-* [ ] Introduce Docker Compose
 * [ ] Add persistent storage
 * [ ] Improve application structure
 * [ ] Add configuration through environment variables
