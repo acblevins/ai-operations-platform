@@ -39,7 +39,7 @@ The project demonstrates how a multi-service application can be developed, conta
 ### AI Operations Platform
 
 ```text
-ai-operations-platform:1.2
+ai-operations-platform:1.3
 ```
 
 Runs the primary Flask application on port `5000`.
@@ -80,13 +80,14 @@ The platform container sends an HTTP request to:
 
 ```text
 http://ai-operations-backend:5001
+```
 
 ## Testing Container-to-Container Communication
 
 Communication was tested from inside the platform container:
 
 ```bash
-docker exec ai-operations-platform-v12 \
+docker exec ai-operations-platform-v13 \
 python -c "import urllib.request; print(urllib.request.urlopen('http://ai-operations-backend:5001').read().decode())"
 ```
 
