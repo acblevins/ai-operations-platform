@@ -9,13 +9,10 @@ services:
     depends_on:
       - backend
     volumes:
-      - platform-data:/data
+      - ./data:/data
 
   backend:
     build:
       context: ./backend
     container_name: ai-operations-backend
-
-volumes:
-  platform-data:
 
